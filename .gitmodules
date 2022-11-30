@@ -1,0 +1,4 @@
+[submodule "external/AMQP-CPP"]
+	path = external/AMQP-CPP
+	url = https://github.com/ricardocrl/AMQP-CPP
+	branch = fix/libboost_heartbeats
