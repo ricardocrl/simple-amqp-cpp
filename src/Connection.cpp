@@ -132,7 +132,7 @@ bool Connection::useChannel(const ChannelOperation& channelOperation)
 {
     // here we sync with the time point when we know if there is a channel
     // available
-    ThreadUtils::SimpleEvent channelAvailEvent;
+    utils::SimpleEvent channelAvailEvent;
     std::optional<bool> channelAvail;
 
     mEvLoop.post([&, channelOperation] {
@@ -160,7 +160,7 @@ bool Connection::useChannel(const ReliableWrapperOperation& reliableOperation)
 {
     // here we sync with the time point when we know if there is a channel
     // available
-    ThreadUtils::SimpleEvent channelAvailEvent;
+    utils::SimpleEvent channelAvailEvent;
     std::optional<bool> channelAvail;
 
     mEvLoop.post([&, reliableOperation] {

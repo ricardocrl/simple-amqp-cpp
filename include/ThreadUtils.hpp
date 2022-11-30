@@ -5,59 +5,53 @@
 #include <memory>
 #include <mutex>
 
-class ThreadUtils
+namespace utils
+{
+
+/**
+ * @class SimpleEvent
+ * @brief Allows a calling thread to wait until notified, whilst avoiding spurious wakeups.
+ */
+class SimpleEvent
 {
 public:
+    using Duration = std::chrono::nanoseconds;
+
+    SimpleEvent() = default;
+
     /**
-     * @class SimpleEvent
-     * @brief Allows a calling thread to wait until notified, whilst avoiding spurious wakeups.
+     * @brief Wait until notify() is called.
+     *
+     * This function will return immediately if notify() is called before.
      */
-    class SimpleEvent
-    {
-    public:
-        using Duration = std::chrono::nanoseconds;
+    void wait();
 
-        SimpleEvent() = default;
+    /**
+     * @brief Wait until notify() is called, or until the specified timeout occurs.
+     * @param timeout Time to wait before the current thread wakes up.
+     * @return True if notify() was called, false if the timeout occurred.
+     */
+    bool waitFor(Duration timeout);
 
-        /**
-         * @brief Wait until notify() is called.
-         *
-         * This function will return immediately if notify() is called before.
-         */
-        void wait();
+    /**
+     * @brief Notify the waiting thread, if any.
+     */
+    void notify();
 
-        /**
-         * @brief Wait until notify() is called, or until the specified timeout occurs.
-         * @param timeout Time to wait before the current thread wakes up.
-         * @return True if notify() was called, false if the timeout occurred.
-         */
-        bool waitFor(Duration timeout);
+    /**
+     * @brief Reset event.
+     */
+    void reset();
 
-        /**
-         * @brief Notify the waiting thread, if any.
-         */
-        void notify();
+    /**
+     * @brief Check if the event was already fired and is, hence, expired
+     */
+    bool expired();
 
-        /**
-         * @brief Reset event.
-         */
-        void reset();
-
-        /**
-         * @brief Check if the event was already fired and is, hence, expired
-         */
-        bool expired();
-
-    private:
-        std::mutex mMutex;
-        std::condition_variable mConditionVariable;
-        bool mDone{false};
-    };
-
-    using SimpleEventPtr = std::shared_ptr<SimpleEvent>;
-
-    ThreadUtils()                    = delete;
-    ThreadUtils(const ThreadUtils&)  = delete;
-    ThreadUtils(const ThreadUtils&&) = delete;
-    ~ThreadUtils()                   = delete;
+private:
+    std::mutex mMutex;
+    std::condition_variable mConditionVariable;
+    bool mDone{false};
 };
+
+} // namespace utils

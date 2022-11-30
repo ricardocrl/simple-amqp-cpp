@@ -1,18 +1,21 @@
 #include "ThreadUtils.hpp"
 
-void ThreadUtils::SimpleEvent::wait()
+namespace utils
+{
+
+void SimpleEvent::wait()
 {
     std::unique_lock<std::mutex> lk{mMutex};
     mConditionVariable.wait(lk, [this] { return mDone; });
 }
 
-bool ThreadUtils::SimpleEvent::waitFor(Duration timeout)
+bool SimpleEvent::waitFor(Duration timeout)
 {
     std::unique_lock<std::mutex> lk{mMutex};
     return mConditionVariable.wait_for(lk, timeout, [this] { return mDone; });
 }
 
-void ThreadUtils::SimpleEvent::notify()
+void SimpleEvent::notify()
 {
     {
         std::unique_lock<std::mutex> lk{mMutex};
@@ -21,14 +24,16 @@ void ThreadUtils::SimpleEvent::notify()
     mConditionVariable.notify_one();
 }
 
-bool ThreadUtils::SimpleEvent::expired()
+bool SimpleEvent::expired()
 {
     std::unique_lock<std::mutex> lk{mMutex};
     return mDone;
 }
 
-void ThreadUtils::SimpleEvent::reset()
+void SimpleEvent::reset()
 {
     std::unique_lock<std::mutex> lk{mMutex};
     mDone = false;
 }
+
+} // namespace utils
