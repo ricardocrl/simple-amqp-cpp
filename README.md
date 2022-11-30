@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a RabbitMQ client, built for Linux-TCP sockets, based on the AMQP-CPP project:
+This is a RabbitMQ client library, built for Linux-TCP sockets, based on the AMQP-CPP project:
 https://github.com/CopernicaMarketingSoftware/AMQP-CPP
 
 The fundamental idea of Simple AMQP-CPP is to provider a `Connection` class that offers:
